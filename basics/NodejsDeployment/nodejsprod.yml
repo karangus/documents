@@ -1,0 +1,31 @@
+---
+- hosts: appserver
+  become: yes
+  roles:
+  - geerlingguy.nodejs
+  tasks:
+  - name: copy nodejs file
+    copy:
+  - name:
+    command:  sudo npm install pm2 -g
+  - name:
+    command: pm2 start hello.js
+
+---
+- hosts: reverseporxy
+  become: yes
+  tasks:
+  - name: install nginx
+    apt:
+      name: nginx
+      state: present
+  - name: configure reverse proxy
+    template:
+      src: default.j2
+      des: /etc/nginx/sites-available/default
+  handlers: 
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted
+      enabled: yes

@@ -1,0 +1,22 @@
+# ansible -m ping all 
+# play
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: Exexute ansiable ping on hosts
+    ping:
+  - name: update packages on ubuntu
+    apt :
+     name: git
+     update_cache: yes
+     state: present 
+  - name: install tree
+    apt:
+      name: tree
+      state: present
+  - name: install apache2
+    apt:
+      name: apache2
+      state: present  
+

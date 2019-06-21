@@ -1,0 +1,32 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    level: 1
+    package_name: nginx
+    default_location: /etc/nginx/sites-available/default
+  tasks:
+  - name: debug info
+    debug:
+      msg:"debug level is set to {{ level 1 }}"
+  - name: install nginx
+    apt:
+      name: "{{ package_name }}"
+      state: present
+      update_cache: yes
+    register: apt_op
+  - debug:
+      var: apt_op
+    when: level > 1
+  - name: Configuring nginx as reverse proxy
+    template:
+      src: default.j2
+      dest: "{{ default_location }}"
+    notify: 
+    - restart nginx
+  handlers:
+  - name: restart nginx
+    service:
+      name: "{{ package_name }}"
+      state: restarted
+      enabled: yes   

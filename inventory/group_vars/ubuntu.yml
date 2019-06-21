@@ -1,0 +1,20 @@
+---
+pack_name: httpd
+php_packages:
+- php
+- libapache2-mob-php
+- php-mcrypt
+- php-mysql
+
+
+
+---
+- hosts: all
+  become: yes
+  tasks:
+   - name: installing the nodejs
+     apt:
+      name: nodejs
+      update_cache: yes
+      service: present
+      
